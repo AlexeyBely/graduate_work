@@ -40,4 +40,4 @@
 
 ## Системная архитектура
        
-![Сжема сервиса биллинга](./schemes/billing_system_schema.png)
+![Сжема сервиса биллинга](./scheme/billing_system_schema.png)
