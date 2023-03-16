@@ -1,7 +1,7 @@
 @startuml billing_system_schema
 title Billing service
-
 skinparam componentStyle uml2
+
 actor Users
 actor Admin
 node "nginx" as nginx
@@ -28,23 +28,23 @@ package "Billing" {
 }
 cloud "Stripe payment"  as stripe
      
-Users -left- nginx
-Admin -right- nginx
-nginx <-down-> admin_views : info payment,\n discount
-nginx <-down-> api : billing, info payment
-fastapi <-down-> auth
-billing_api <-> auth : syncro roles
+Users -[#blue]left- nginx
+Admin -[#blue]right- nginx
+nginx <-[#blue]down-> admin_views : info payment,\n discount
+nginx <-[#blue]down-> api : billing, info payment
+fastapi <-[#blue]down-> auth
+billing_api <-[#blue]> auth : syncro roles
 
-admin_orm <-up-> psql 
-api_billing <-> psql
-payment <-> stripe : page billing
-celery_tasks -down-> rabbit
+admin_orm <-[#blue]up-> psql 
+api_billing <-[#blue]> psql
+payment <-[#blue]> stripe : page billing
+celery_tasks -[#blue]down-> rabbit
 
-beat -up-> rabbit
-rabbit -> worker
-worker <-> stripe
-worker -down-> auth : add/delete role
-worker -down-> notify
-worker -right-> psql
+beat -[#blue]up-> rabbit
+rabbit -[#blue]> worker
+worker <-[#blue]> stripe
+worker -[#blue]down-> auth : add/delete role
+worker -[#blue]down-> notify
+worker -[#blue]right-> psql
  
 @enduml 

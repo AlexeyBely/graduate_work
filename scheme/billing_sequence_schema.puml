@@ -1,0 +1,85 @@
+@startuml billing_sequence_schema
+title User payment process
+skinparam componentStyle uml2
+
+actor User as user
+participant "billing-api" as api
+participant "psql-billing" as psql
+participant "billing-beat" as beat
+participant "billing-rabbitmq" as rabbitmq
+participant "billing-worker" as worker
+participant "auth service" as auth
+participant "notification service" as notify
+participant "stripe payment" as stripe
+
+box "Billing service" #LightGreen
+	participant api
+    participant psql
+    participant beat
+    participant rabbitmq
+    participant worker
+end box
+box "Other services" #LightSeaGreen
+	participant auth
+    participant notify
+end box
+box "Cloud services" #LightSteelBlue
+	participant stripe
+end box
+
+
+user [#blue]-> api : Give cost priority
+activate api #LightBlue
+user <-[#blue] api : Priority cost
+user [#blue]-> api : Payment page request
+api [#blue]-> stripe : Open payment session
+activate stripe #LightBlue
+stripe [#blue]-> api : Payment session data
+api [#blue]-> psql : Save payment id and state
+activate psql #LightBlue
+api <-[#blue]- psql : Saved
+deactivate psql
+api [#blue]-> user : Payment page url
+
+alt callback payment from stripe
+    stripe [#red]-> api : Callback end payment
+    api [#blue]-> rabbitmq : Task to change the user's priority (role)
+    activate rabbitmq #LightBlue
+    rabbitmq -[#blue]-> api : null    
+    api [#blue]-> stripe : Accepted
+    deactivate api
+else requrest payment to stripe
+    beat [#red]-> rabbitmq : Task to check states payments
+    activate beat #LightBlue
+    rabbitmq -[#blue]-> beat : null
+    deactivate beat
+    rabbitmq [#blue]-> worker : Check states payments
+    activate worker #LightBlue
+    worker [#blue]-> psql : Request for unpaid payments
+    activate psql #LightBlue
+    psql [#blue]-> worker : ids unpaid payments
+    deactivate psql
+    worker [#blue]-> stripe : Check end payments
+    stripe [#blue]-> worker : Info end payments
+    deactivate stripe
+    worker -[#blue]-> rabbitmq : Task to change the user's priority
+    rabbitmq -[#blue]-> worker : null
+    deactivate worker
+end group
+
+rabbitmq -[#blue]-> worker : Change the user's priority (role)
+activate worker #LightBlue
+worker [#blue]-> auth : Change the user's role
+activate auth #LightBlue
+auth -[#blue]-> worker : Role changed
+deactivate auth
+worker [#blue]-> psql : Save end payment
+activate psql #LightBlue
+worker <-[#blue]- psql : Saved
+deactivate psql
+worker [#blue]-> notify : Send end payment message
+activate notify #LightBlue
+notify -[#blue]-> worker : null
+deactivate notify
+
+@enduml
