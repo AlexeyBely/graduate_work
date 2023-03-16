@@ -1,0 +1,50 @@
+@startuml billing_system_schema
+title Billing service
+skinparam componentStyle uml2
+
+actor Users
+actor Admin
+node "nginx" as nginx
+node "fastapi" as fastapi
+node "auth" as auth
+node "notification" as notify
+package "Billing" {
+    node "admin-billing Django" as django{
+        component "Admin views" as admin_views        
+        component "Django ORM" as admin_orm            
+    }
+    database "psql-billing Postgresql" as psql {    
+        component "Tabels: \n user\n tariff\n discount\n promo" as tables
+    }
+    node "billing-api" as billing_api{
+        component "API" as api
+        component "billing" as api_billing 
+        component "payment system" as payment
+        component "celery tasks" as celery_tasks                  
+    }
+    node "billing-rabbitmq RabbitMQ" as rabbit
+    node "billing-worker Celery" as worker    
+    node "billing-beat Celery" as beat
+}
+cloud "Stripe payment"  as stripe
+     
+Users -[#blue]left- nginx
+Admin -[#blue]right- nginx
+nginx <-[#blue]down-> admin_views : info payment,\n discount
+nginx <-[#blue]down-> api : billing, info payment
+fastapi <-[#blue]down-> auth
+billing_api <-[#blue]> auth : syncro roles
+
+admin_orm <-[#blue]up-> psql 
+api_billing <-[#blue]> psql
+payment <-[#blue]> stripe : page billing
+celery_tasks -[#blue]down-> rabbit
+
+beat -[#blue]up-> rabbit
+rabbit -[#blue]> worker
+worker <-[#blue]> stripe
+worker -[#blue]down-> auth : add/delete role
+worker -[#blue]down-> notify
+worker -[#blue]right-> psql
+ 
+@enduml 
