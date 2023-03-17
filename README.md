@@ -44,4 +44,8 @@
 
 ## Диаграмма последовательности оплаты
        
-![Сжема сервиса биллинга](./scheme/billing_sequence_schema.png)
+![Диаграмма последовательности](./scheme/billing_sequence_schema.png)
+
+## Схема базы данных psql-billing
+    
+![Схема базы данных](./scheme/schema_db.png)    
