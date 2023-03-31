@@ -14,7 +14,7 @@ package "Billing" {
         component "Django ORM" as admin_orm            
     }
     database "psql-billing Postgresql" as psql {    
-        component "Tabels: \n user\n tariff\n discount\n promo" as tables
+        component "Tabels: \n payment\n tariff\n discount\n promo" as tables
     }
     node "billing-api" as billing_api{
         component "API" as api

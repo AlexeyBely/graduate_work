@@ -1,0 +1,1 @@
+LOCALE_PATHS = ['locale']
