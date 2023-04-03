@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import uuid
 
-from models.payment import PaymentUrl
+from schemas.payment import PaymentUrl
 
 
 class BasePaymentService(ABC):

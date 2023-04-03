@@ -1,4 +1,5 @@
-LIKE_NOT_FOUND = 'Like not found'
-REVIEW_NOT_FOUND = 'Review not found'
+TARIFFS_NOT_CREATED = 'Tariffs not created'
+DISCOUNTS_NOT_CREATED = 'Discounts not created'
+USER_NOT_DISCOUNT = 'No discounts for this user'
 FAULT_BOBY = 'Fault body'
 DOC_DELETED = 'Document deleted'

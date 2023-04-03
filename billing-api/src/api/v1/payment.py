@@ -3,13 +3,13 @@ from fastapi import APIRouter, Depends, HTTPException, Body, status
 from fastapi.responses import Response
 import uuid
 
-from models.request import TestStripe
-from models.payment import PaymentUrl
+from schemas.payment import PaymentUrl
 from payment_service.payment_service_abs import BasePaymentService
 from payment_service.payment_dependency import get_payment_service
 
 from api.v1.auth import TokenData, authenticate
 import api.messages as messages
+
 
 router = APIRouter()
 
@@ -22,13 +22,12 @@ router = APIRouter()
     response_description='test',
 )
 def add_test(
-    input: TestStripe = Body(...),
     payment_service: BasePaymentService = Depends(get_payment_service),
     #token_data: TokenData = Depends(authenticate),
 ) -> None:
     """test."""
     pay = payment_service.get_url_payment(
-        amount=input.amount,
+        amount=100,
         description='test pay',
     )
     return None

@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 
 from core.config import settings
-from models.auth import TokenData
+from schemas.auth import TokenData
 
 
 http_scheme = HTTPBearer()

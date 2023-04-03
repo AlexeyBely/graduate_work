@@ -41,12 +41,6 @@ class PrivilegedRole(UUIDMixin):
         db_table = 'billing\'.\'privileged_role'
         verbose_name = _('privileged_role')
         verbose_name_plural = _('privileged_roles')
-        constraints = [
-            models.UniqueConstraint(
-                fields=['customer_id',],
-                name="customer_role_idx"
-            ),
-        ]
 
     def __str__(self):
         return self.role_payment
@@ -90,12 +84,6 @@ class Payment(UUIDMixin):
         db_table = 'billing\'.\'payment'
         verbose_name = _('payment')
         verbose_name_plural = _('payments')
-        constraints = [
-            models.UniqueConstraint(
-                fields=['customer_id',],
-                name="customer_payment_idx"
-            ),
-        ]
 
     def __str__(self):
         return str(f'{self.amount} {self.currency}')

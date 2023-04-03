@@ -4,7 +4,7 @@ import logging
 
 from payment_service.payment_service_abs import BasePaymentService
 from core.config import settings
-from models.payment import PaymentUrl, PaymentСreate
+from schemas.payment import PaymentUrl, PaymentСreate
 
 
 logger = logging.getLogger('')
