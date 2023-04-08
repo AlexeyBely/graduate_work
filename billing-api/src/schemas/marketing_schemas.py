@@ -14,7 +14,7 @@ class MonthsDiscountSchema(BaseModel):
 
 class PromocodeSchema(BaseModel):
     code: str
-    description: str
+    description: str | None
     role: str
     discount: int
     amount_months: int
@@ -23,5 +23,5 @@ class PromocodeSchema(BaseModel):
 
 class TariffSchema(BaseModel):
     role: str
-    description: str    
+    description: str | None   
     price: float

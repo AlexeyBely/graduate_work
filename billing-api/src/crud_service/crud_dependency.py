@@ -3,9 +3,15 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from crud_service.read_marketing_sql import SqlReadMarketing
-from db.dependency import get_db_async
+from crud_service.crud_billing_sql import SqlCrudBilling
+from db.psql_async import session_psql_async
 
 
 @lru_cache()
-def get_crud_marketing(session: Session = Depends(get_db_async)) -> SqlReadMarketing:
-    return SqlReadMarketing(session)
+def get_crud_marketing() -> SqlReadMarketing:
+    return SqlReadMarketing(session_psql_async)
+
+
+@lru_cache()
+def get_crud_billing() -> SqlCrudBilling:
+    return SqlCrudBilling(session_psql_async)

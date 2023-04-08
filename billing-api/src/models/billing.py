@@ -1,59 +1,45 @@
 import uuid
-import enum
-from sqlalchemy import Column, String, UUID, DateTime, Integer, Float, Enum, ForeignKey
-
-from db.postgresql import Base
-  
-
-class SubscriptionStatus(enum.Enum):
-    CREATED = 'created'
-    SUBSCRIBE = 'subscribe'
-    EXPIRED = 'expired'
-    BLOCKED = 'blocked'
-
-
-class PaymentStatus(enum.Enum):
-    BILLED = 'billed'
-    PAID = 'paid'
-    BILLED_TIMEOUT = 'billed_timeout'
-    REFUND = 'refund'
-    REFUNDED = 'refunded'
+from sqlalchemy import Column, String, UUID, DateTime, Integer, Float, ForeignKey 
+from db.psql_async import Base
 
 
 class CustomerModel(Base):
-    __tablename__ = 'billing\'.\'customer'
+    __tablename__ = 'customer'
+    __table_args__ = {'schema': 'billing'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-    id_user = Column(UUID(as_uuid=True), unique=True)
+    user_id = Column(UUID(as_uuid=True), unique=True)
     email = Column(String)
 
 
 class PrivilegedRoleModel(Base):
-    __tablename__ = 'billing\'.\'privileged_role'
+    __tablename__ = 'privileged_role'
+    __table_args__ = {'schema': 'billing'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-    customer = Column(UUID(as_uuid=True), ForeignKey('customer.id'))
-    status = Column(Enum(SubscriptionStatus))
+    customer_id = Column(UUID(as_uuid=True), ForeignKey('billing.customer.id'))
+    status = Column(String)
     role_payment = Column(String)
     end_payment = Column(DateTime)
 
 
 class PaymentModel(Base):
-    __tablename__ = 'billing\'.\'payment'
+    __tablename__ = 'payment'
+    __table_args__ = {'schema': 'billing'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-    customer = Column(UUID(as_uuid=True), ForeignKey('customer.id'))
-    status = Column(Enum(PaymentStatus))
+    customer_id = Column(UUID(as_uuid=True), ForeignKey('billing.customer.id'))
+    status = Column(String)
     role_payment = Column(String)
     amount_months = Column(Integer)
     payed_at = Column(DateTime)
-    personal_discount = Column(Integer)
-    months_discount = Column(Integer)
-    promocode = Column(String)
+    personal_discount = Column(Integer, nullable=True)
+    months_discount = Column(Integer, nullable=True)
+    promocode = Column(String, nullable=True)
     tariff = Column(Float)
     amount = Column(Float)
     currency = Column(String)
-    id_payment = Column(String)
-    id_checkout = Column(String)
-    id_refund = Column(String)
-    card = Column(String)
+    id_payment = Column(String, nullable=True)
+    id_checkout = Column(String, nullable=True)
+    id_refund = Column(String, nullable=True)
+    card = Column(String, nullable=True)

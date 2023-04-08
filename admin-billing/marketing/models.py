@@ -19,7 +19,7 @@ class Tariff(IdMixin):
     price = models.FloatField(_('Price'))
 
     class Meta:
-        db_table = 'marketing\'.\'tariff'
+        db_table = 'marketing\".\"tariff'
         verbose_name = _('tariff')
         verbose_name_plural = _('tariffs')
 
@@ -29,13 +29,19 @@ class Tariff(IdMixin):
 
 class PersonalDiscount(IdMixin):
     """Personal discount for the user."""
-    user_id = models.UUIDField(_('ID_user'))
+    user_id = models.UUIDField(_('ID_user'), unique=True)
     discount = models.IntegerField(_('Discount'))
 
     class Meta:
-        db_table = 'marketing\'.\'personal_discount'
+        db_table = 'marketing\".\"personal_discount'
         verbose_name = _('personal_discount')
         verbose_name_plural = _('personal_discounts')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user_id',],
+                name='personal_discount_unique'
+            ),
+        ]
 
     def __str__(self):
         return str(self.discount)
@@ -47,7 +53,7 @@ class MonthsDiscount(IdMixin):
     discount = models.IntegerField(_('Discount'))
 
     class Meta:
-        db_table = 'marketing\'.\'months_discount'
+        db_table = 'marketing\".\"months_discount'
         verbose_name = _('months_discount')
         verbose_name_plural = _('months_discounts')
 
@@ -65,7 +71,7 @@ class Promocode(IdMixin):
     expiration = models.DateTimeField(_('Expiration'))
 
     class Meta:
-        db_table = 'marketing\'.\'promocode'
+        db_table = 'marketing\".\"promocode'
         verbose_name = _('promocode')
         verbose_name_plural = _('promocodes')
 

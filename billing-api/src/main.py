@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 from api.v1 import payment, offer, marketing
 from core.config import settings
@@ -20,11 +19,7 @@ app = FastAPI(
 
 @app.on_event('startup')
 async def startup():
-    psql_async.engine_psql_async = create_async_engine(psql_async.sqlalchemy_asyncpg_url,
-                                                       echo=True)
-    psql_async.session_psql_async = sessionmaker(psql_async.engine_psql_async,
-                                                 expire_on_commit=False,
-                                                 class_=AsyncSession)
+    pass
 
 
 @app.on_event('shutdown')

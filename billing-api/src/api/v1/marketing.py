@@ -27,7 +27,8 @@ async def get_tariffs(
 ) -> list[TariffSchema]:
     tariffs = await crud_marketing.get_tariffs()
     if not tariffs:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  detail=messages.TARIFFS_NOT_CREATED)
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  
+                            detail=messages.TARIFFS_NOT_CREATED)
     return tariffs
 
 
@@ -43,7 +44,8 @@ async def get_months_discounts(
 ) -> list[MonthsDiscountSchema]:
     discounts = await crud_marketing.get_months_discounts()
     if not discounts:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  detail=messages.DISCOUNTS_NOT_CREATED)
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  
+                            detail=messages.DISCOUNTS_NOT_CREATED)
     return discounts
 
 
@@ -61,7 +63,8 @@ async def get_personal_discount(
     user_id = uuid.UUID(token_data.user)
     discount = await crud_marketing.get_personal_discount(user_id)
     if not discount:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  detail=messages.USER_NOT_DISCOUNT)
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,  
+                            detail=messages.USER_NOT_DISCOUNT)
     return discount
 
 
@@ -79,5 +82,6 @@ async def debag_marketing(
     #user_id = uuid.uuid4()
     result = await crud_marketing.get_promocode_discount('Super_Discount')
     if not result:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=messages.FAULT_BOBY)
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, 
+                            detail=messages.FAULT_BOBY)
     return None
