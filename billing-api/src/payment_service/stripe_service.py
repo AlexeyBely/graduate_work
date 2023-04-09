@@ -4,7 +4,7 @@ import logging
 
 from payment_service.payment_service_abs import BasePaymentService
 from core.config import settings
-from models.payment import PaymentUrl, PaymentСreate
+from schemas.payment import PaymentUrl, PaymentСreate
 
 
 logger = logging.getLogger('')
@@ -30,7 +30,7 @@ class StripeService(BasePaymentService):
                                 'name': description,
                                 'description': f'user {description}',
                             },
-                            'unit_amount': int(amount / settings.stripe_smallest_currency),
+                            'unit_amount': int(amount / settings.payment_smallest_currency),
                         },
                         'quantity': 1,
                     },

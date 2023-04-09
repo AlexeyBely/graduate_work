@@ -14,7 +14,6 @@ services:
       - static:/app/static
     ports:
       - "80:80"
-      - "8000:80"
     depends_on:
       - admin-billing
 
@@ -49,8 +48,6 @@ services:
       - ${ADMIN_BILLING_PORT}
     depends_on:
       - psql
-    ports:
-      - "${ADMIN_BILLING_PORT}:${ADMIN_BILLING_PORT}"
 
 networks:
   default:

@@ -18,6 +18,7 @@ class PaymentInline(admin.TabularInline):
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
         'email',
+        'get_privileged_roles',
     )
     inlines = (
         PrivilegedRoleInline,
@@ -26,3 +27,12 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = (
         'email',
     )
+
+    def get_privileged_roles(self, obj):
+        roles = obj.privilegedrole_set.all()
+        return [f'{role.role_payment} up to {role.end_payment:%d-%m-%Y %H:%M}' 
+                for role in roles]
+    
+    get_privileged_roles.short_description = _('Role')
+
+     
