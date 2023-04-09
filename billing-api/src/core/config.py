@@ -18,8 +18,9 @@ class ApiSettings(BaseSettings):
     token_algoritm: str = 'HS256'
     payment_currency: str = 'usd'
     payment_success_url: str = 'https://ya.ru/'
+    #payment_smallest_currency: float = 0.01
+    payment_smallest_currency: int = 100
     stripe_api_key: str = 'sk_test_51MmcI4EDsXu7ZV5DF1l10mZuZC5iGb8W41FrYxXXgMzbS5lQ1w34alOaCNAInpHzHcnIc7hXhabNh8HqlafoCM3O002ye80K06'
-    stripe_smallest_currency: float = 0.01
     stripe_id_product: str = 'prod_NaetpznQ9m7dyF'
 
 

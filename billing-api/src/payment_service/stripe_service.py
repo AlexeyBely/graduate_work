@@ -30,7 +30,7 @@ class StripeService(BasePaymentService):
                                 'name': description,
                                 'description': f'user {description}',
                             },
-                            'unit_amount': int(amount / settings.stripe_smallest_currency),
+                            'unit_amount': int(amount / settings.payment_smallest_currency),
                         },
                         'quantity': 1,
                     },

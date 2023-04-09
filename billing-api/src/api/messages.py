@@ -1,5 +1,7 @@
 TARIFFS_NOT_CREATED = 'Tariffs not created'
 DISCOUNTS_NOT_CREATED = 'Discounts not created'
 USER_NOT_DISCOUNT = 'No discounts for this user'
+USER_NOT_ROLES = 'No subscrabed privileded roles for this user'
 FAULT_BOBY = 'Fault body'
+FAULT_QUERY = 'Fault query'
 DOC_DELETED = 'Document deleted'
