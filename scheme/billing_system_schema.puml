@@ -13,8 +13,7 @@ package "Billing" {
         component "Admin views" as admin_views        
         component "Django ORM" as admin_orm            
     }
-    database "psql-billing Postgresql" as psql {    
-        component "Tabels: \n payment\n tariff\n discount\n promo" as tables
+    database "sql-billing Postgresql" as psql {    
     }
     node "billing-api" as billing_api{
         component "API" as api
@@ -26,7 +25,7 @@ package "Billing" {
     node "billing-worker Celery" as worker    
     node "billing-beat Celery" as beat
 }
-cloud "Stripe payment"  as stripe
+cloud "payment system (Stripe)"  as stripe
      
 Users -[#blue]left- nginx
 Admin -[#blue]right- nginx
