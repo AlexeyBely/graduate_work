@@ -10,7 +10,7 @@ participant "billing-rabbitmq" as rabbitmq
 participant "billing-worker" as worker
 participant "auth service" as auth
 participant "notification service" as notify
-participant "stripe payment" as stripe
+participant "payment system" as stripe
 
 box "Billing service" #LightGreen
 	participant api
