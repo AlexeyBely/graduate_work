@@ -8,11 +8,11 @@ from db import psql_async
 
 
 app = FastAPI(
-    title=f'Сервис {settings.project_name}',
+    title=f'{settings.project_name} service',
     docs_url='/billing/api/openapi',
     openapi_url='/billing/api/openapi.json',
     default_response_class=ORJSONResponse,
-    description='Сервис выставления счетов',
+    description='Offer calculation and subscription billing',
     version='1.0.1',
 )
 
