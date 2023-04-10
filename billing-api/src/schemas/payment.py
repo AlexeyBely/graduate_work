@@ -1,15 +1,20 @@
-from pydantic import BaseModel, UUID4, Field
+from pydantic import BaseModel
 from datetime import datetime
 
-
-class PaymentСreate(BaseModel):
-    id_pay: str
-    card: str
-    amount: float
-    currency: str
+from schemas.billing_schemas import PayStatus
 
 
-class PaymentUrl(PaymentСreate):
-    url_payment: str
+class CheckoutPayment(BaseModel):
+    id_checkout: str
+    id_payment: str | None = None    
+    card: str | None = None
+    url: str
+    status: PayStatus
+
+
+class RefundPayment(BaseModel):
+    id_refund: str
+    status: PayStatus
+
 
 
