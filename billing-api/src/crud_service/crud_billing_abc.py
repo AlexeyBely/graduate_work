@@ -104,3 +104,8 @@ class BaseCrudBilling(ABC):
         - time_after_expired - more time has passed since the subscription expired. 
         """
         pass
+
+    @abstractmethod
+    async def get_user_id(self, customer_id: uuid.UUID) -> uuid.UUID | None:
+        """Read user_id with customer_id."""
+        pass

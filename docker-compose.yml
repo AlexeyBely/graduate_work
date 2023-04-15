@@ -4,19 +4,6 @@ volumes:
     name: billing_static
 
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx-billing
-    volumes:
-      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./deploy/nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
-      - /tmp/logs/nginx/:/var/log/nginx/
-      - static:/app/static
-    ports:
-      - "80:80"
-    depends_on:
-      - admin-billing
-
   psql:
     build:
       context: ./deploy/psql
@@ -48,9 +35,23 @@ services:
       - ${ADMIN_BILLING_PORT}
     depends_on:
       - psql
+  nginx:
+    image: nginx:latest
+    container_name: nginx-billing
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
+      - /tmp/logs/nginx/:/var/log/nginx/
+      - static:/app/static
+    ports:
+      - "82:80"
+      - "8002:80"
+    depends_on:
+      - admin-billing
 
 networks:
   default:
-    name: movies_networks  
+    name: movies_networks
     external: true
+
 

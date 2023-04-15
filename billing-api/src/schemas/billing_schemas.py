@@ -46,6 +46,7 @@ class PaymentBase(BaseModel):
     id_checkout: str | None
     id_refund: str | None
     card: str | None
+    jti_compromised: str | None
 
 
 class MixinId(BaseModel):    

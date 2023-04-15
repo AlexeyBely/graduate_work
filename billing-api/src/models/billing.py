@@ -43,3 +43,4 @@ class PaymentModel(Base):
     id_checkout = Column(String, nullable=True)
     id_refund = Column(String, nullable=True)
     card = Column(String, nullable=True)
+    jti_compromised = Column(String, nullable=True)

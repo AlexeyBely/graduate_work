@@ -53,6 +53,11 @@ class SqlCrudBilling(BaseCrudBilling):
             await session.delete(customer)
             await session.commit()
 
+    async def get_user_id(self, customer_id: uuid.UUID) -> uuid.UUID | None:
+        """Read user_id with customer_id."""
+        customer = await self._read_obj(CustomerModel, CustomerSchema, customer_id)
+        return customer.user_id
+
     # Methods for payment
     async def create_payment(self, payment: PaymentBase) -> PaymentSchema:
         """Create new payment."""

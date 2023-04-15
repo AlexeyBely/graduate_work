@@ -16,3 +16,5 @@ oitnb==0.2.2
 celery==5.2.7
 stripe==5.3.0
 async-stripe==5.3.0
+grpcio==1.53.0
+grpcio-tools==1.53.0

@@ -10,6 +10,8 @@ class EnvSettings(BaseSettings):
     psql_port: int = Field(5432, env='billing_postgres_port')
     psql_host: str = Field('127.0.0.1', env='billing_postgres_host')  
     admin_timezone: str = 'Europe/Moscow'
+    auth_grpc_port: int = 50051
+    auth_grpc_host: str = '127.0.0.1'
 
 
 env_settings = EnvSettings()

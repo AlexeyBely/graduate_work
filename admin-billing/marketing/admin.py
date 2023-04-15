@@ -2,10 +2,11 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from .models import Tariff, PersonalDiscount, MonthsDiscount, Promocode
+from .admin_hooks import HookTariffAdmin
 
 
 @admin.register(Tariff)
-class TariffAdmin(admin.ModelAdmin):
+class TariffAdmin(HookTariffAdmin):
     list_display = (
         'role',
         'price',
