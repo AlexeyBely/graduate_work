@@ -1,9 +1,11 @@
-import grpc
 import uuid
+import grpc
+from grpc.aio import insecure_channel
 
 from grpc_service.auth_service import roles_control_pb2_grpc
 from grpc_service.auth_service import roles_control_pb2
 from core.config import settings
+
 
 grpc_url = f'{settings.auth_grpc_host}:{settings.auth_grpc_port}'
 grpc_channel = grpc.aio.insecure_channel
@@ -30,11 +32,11 @@ async def grpc_auth_provide_role(user_id: uuid.UUID, role_id: uuid.UUID,
             roles_control_pb2.ProvideRole(
                 user_id=str(user_id),
                 role_id=str(role_id),
-                jti_to_compromised=str(jti)
+                jti_to_compromised=str(jti) 
             )
         )
         return result.successful
-    
+  
 
 async def grpc_auth_revoke_role(user_id: uuid.UUID, role_id: uuid.UUID, 
                                 jti: str) -> bool:

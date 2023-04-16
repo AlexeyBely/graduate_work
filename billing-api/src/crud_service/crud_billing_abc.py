@@ -95,7 +95,8 @@ class BaseCrudBilling(ABC):
     async def get_privileged_roles(self,
                                    customer_id: uuid.UUID | None = None,
                                    filter_status: SubStatusEnum | None = None,
-                                   time_after: datetime | None = None,                                 
+                                   time_after: datetime | None = None,
+                                   role: str | None = None,                                 
                                    ) -> list[PrivilegedRoleSchema] | None:
         """Read privileged roles meeting the following filters.
 

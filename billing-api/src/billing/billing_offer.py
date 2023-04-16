@@ -11,7 +11,9 @@ from payment_service.payment_dependency import get_payment_service
 from schemas.offer_schemas import RoleOffer
 from schemas.billing_schemas import (CustomerSchema, CustomerBase, PaymentBase, 
                                      PayStatus, PaymentSchema)
+from billing.privileged_role import subscribe_roles
 from grpc_service.auth_service import roles_control_client as rc_client
+
 
 class BillingOffer:
     """Privileged roles offer and customer billing."""
@@ -128,7 +130,6 @@ class BillingOffer:
     
     async def check_payments(self) -> None:
         """Checks payment of users in the payment system."""
-        # check paid
         billed_payments = await self.crud_billing.get_payments(
             filter_status=PayStatus.BILLED
         )
@@ -138,20 +139,14 @@ class BillingOffer:
         for checkout in checkouts:
             if checkout.status == PayStatus.PAID:
                 payment = billed_payments[payment_counter]
-                #update role ______________
-                user_id = await self.crud_billing.get_user_id(payment.customer_id)
-                tariff = await self.read_marketing.get_role_tariff(payment.role_payment)
-                provided = await rc_client.grpc_auth_provide_role(
-                    user_id=user_id,
-                    role_id=tariff.auth_role_id,
-                    jti=payment.jti_compromised
-                )
-                #----------------------------
+                provided = await subscribe_roles(self.read_marketing, self.crud_billing
+                                                 ).subscribe_paid_role(payment)
                 if provided is True:
                     await self._update_status_payment(payment, PayStatus.PAID, checkout.id_payment)
-                #_______________________________
                 payment_counter += 1
-        # check refunded
+
+    async def check_refunds(self) -> None:
+        """Checks refund of users in the payment system."""
         refund_payments = await self.crud_billing.get_payments(
             filter_status=PayStatus.REFUND
         )
@@ -161,22 +156,10 @@ class BillingOffer:
         for refund in refunds:
             if refund.status == PayStatus.REFUNDED:
                 payment = refund_payments[payment_counter]
-                #update role ______________-
-                user_id = await self.crud_billing.get_user_id(payment.customer_id)
-                tariff = await self.read_marketing.get_role_tariff(payment.role_payment)
-                revoked = await rc_client.grpc_auth_revoke_role(
-                    user_id=user_id,
-                    role_id=tariff.auth_role_id,
-                    jti=payment.jti_compromised
-                )
-                #_________________________
+                revoked = await subscribe_roles(self.read_marketing, self.crud_billing
+                                                 ).unsubscribe_paid_role(payment)
                 if revoked is True:
                     await self._update_status_payment(payment, PayStatus.REFUNDED)
-                #payment.status = PayStatus.REFUNDED
-                #await self.crud_billing.update_payment(
-                #    payment_id=payment.id,
-                #    payment=PaymentBase(**payment.__dict__)
-                #)
                 payment_counter += 1
 
     async def get_payments_for_refund(self, user_id: uuid.UUID

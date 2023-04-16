@@ -130,7 +130,8 @@ class SqlCrudBilling(BaseCrudBilling):
     async def get_privileged_roles(self,
                                    customer_id: uuid.UUID | None = None,
                                    filter_status: SubStatusEnum | None = None,
-                                   time_after: datetime | None = None,                                 
+                                   time_after: datetime | None = None,
+                                   role: str | None = None,                                  
                                    ) -> list[PrivilegedRoleSchema] | None:
         """Read privileged roles meeting the following filters.
 
@@ -147,6 +148,8 @@ class SqlCrudBilling(BaseCrudBilling):
             if time_after is not None:
                 check_time = datetime.now() - time_after
                 stmt = stmt.where(PrivilegedRoleModel.end_payment < check_time)
+            if role is not None:
+                stmt = stmt.where(PrivilegedRoleModel.role_payment == role)
             result = await session.execute(
                 stmt.order_by(PrivilegedRoleModel.end_payment)
             )

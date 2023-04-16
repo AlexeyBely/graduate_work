@@ -24,6 +24,11 @@ class ApiSettings(BaseSettings):
     stripe_id_product: str = 'prod_NaetpznQ9m7dyF'
     auth_grpc_port: int = 50051
     auth_grpc_host: str = '127.0.0.1'
+    rabbitmq_default_user: str = 'guest'
+    rabbitmq_default_pass: str = 'guest'
+    rabbitmq_default_vhost: str = ''
+    billing_rabbitmq_host: str = '127.0.0.1'
+    billing_rabbitmq_port: int = 5672
 
 
 settings = ApiSettings()

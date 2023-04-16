@@ -35,6 +35,38 @@ services:
       - ${ADMIN_BILLING_PORT}
     depends_on:
       - psql
+
+  billing-api:
+    build: ./billing-api
+    image: billing_api:1.0
+    container_name: ${BILLING_API_HOST}
+    entrypoint: >
+      sh -c "uvicorn main_api:app --host 0.0.0.0 --port $BILLING_API_PORT"
+    env_file:
+      - ./.env
+    depends_on:
+      - psql
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: ${BILLING_RABBITMQ_HOST}
+    env_file:
+      - ./.env
+
+  worker:
+    image: billing_api:1.0
+    container_name: ${BILLING_WORKER_HOST}
+    env_file:
+      - .env
+    entrypoint: >
+      sh -c "celery -A app_celery worker -B --loglevel=info"
+    expose:
+      - ${BILLING_WORKER_PORT}
+    depends_on:
+      - rabbitmq
+      - psql
+      - billing-api
+
   nginx:
     image: nginx:latest
     container_name: nginx-billing

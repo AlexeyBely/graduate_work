@@ -16,6 +16,4 @@ RUN apt-get update \
 
 COPY . .
 
-EXPOSE $ACTION_PORT
-
 WORKDIR /app/src/

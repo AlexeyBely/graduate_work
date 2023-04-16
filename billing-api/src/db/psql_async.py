@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.pool import NullPool
 
 from core.config import settings
 
@@ -13,10 +14,17 @@ sqlalchemy_asyncpg_url = 'postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}'.format(
 )
 
 
-engine_psql_async = create_async_engine(sqlalchemy_asyncpg_url,
-                                                       echo=True)
-session_psql_async = async_sessionmaker(engine_psql_async,
-                                       expire_on_commit=False,
-                                       class_=AsyncSession)
+engine_psql_async = create_async_engine(
+    sqlalchemy_asyncpg_url,
+    future=True,
+    poolclass=NullPool,
+    echo=False
+)
+
+session_psql_async = async_sessionmaker(
+    engine_psql_async,
+    expire_on_commit=False,
+    class_=AsyncSession
+)
 
 Base = declarative_base()

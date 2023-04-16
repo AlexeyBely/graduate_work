@@ -151,4 +151,5 @@ async def get_url_payment(
     billing: BillingOffer = Depends(get_billing_offer),
 ) -> None:
     await billing.check_payments()
+    await billing.check_refunds()
     return None
