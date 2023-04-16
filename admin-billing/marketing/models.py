@@ -17,6 +17,8 @@ class Tariff(IdMixin):
     role = models.CharField(_('Role'), max_length=MAX_LENGTH_NAME)
     description = models.TextField(_('Description'), blank=True, null=True)
     price = models.FloatField(_('Price'))
+    auth_role_id = models.UUIDField(_('ID_auth_role'), unique=True, 
+                                    blank=True, null=True)
 
     class Meta:
         db_table = 'marketing\".\"tariff'

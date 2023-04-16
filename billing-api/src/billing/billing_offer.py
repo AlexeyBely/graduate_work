@@ -11,6 +11,9 @@ from payment_service.payment_dependency import get_payment_service
 from schemas.offer_schemas import RoleOffer
 from schemas.billing_schemas import (CustomerSchema, CustomerBase, PaymentBase, 
                                      PayStatus, PaymentSchema)
+from billing.privileged_role import subscribe_roles
+from grpc_service.auth_service import roles_control_client as rc_client
+
 
 class BillingOffer:
     """Privileged roles offer and customer billing."""
@@ -84,7 +87,7 @@ class BillingOffer:
             role_description=role.description
         )
     
-    async def get_payment_url(self, apply_promocode: bool, user_id: uuid.UUID, 
+    async def get_payment_url(self, apply_promocode: bool, user_id: uuid.UUID, jti: str,
                               role_payment: str, amount_months: int, promocode_code: str
                              ) -> str | None:
         """Return url payment and create object payment in billing service."""
@@ -120,13 +123,13 @@ class BillingOffer:
                 amount=offer.total_price,
                 currency=offer.currency,
                 id_checkout=checkout.id_checkout,
+                jti_compromised=jti
             )
         )
         return checkout.url
     
     async def check_payments(self) -> None:
         """Checks payment of users in the payment system."""
-        # check paid
         billed_payments = await self.crud_billing.get_payments(
             filter_status=PayStatus.BILLED
         )
@@ -136,16 +139,14 @@ class BillingOffer:
         for checkout in checkouts:
             if checkout.status == PayStatus.PAID:
                 payment = billed_payments[payment_counter]
-                #update role ______________-
-                payment.status = PayStatus.PAID
-                payment.payed_at=datetime.now()
-                payment.id_payment = checkout.id_payment
-                await self.crud_billing.update_payment(
-                    payment_id=payment.id,
-                    payment=PaymentBase(**payment.__dict__)
-                )
+                provided = await subscribe_roles(self.read_marketing, self.crud_billing
+                                                 ).subscribe_paid_role(payment)
+                if provided is True:
+                    await self._update_status_payment(payment, PayStatus.PAID, checkout.id_payment)
                 payment_counter += 1
-        # check refunded
+
+    async def check_refunds(self) -> None:
+        """Checks refund of users in the payment system."""
         refund_payments = await self.crud_billing.get_payments(
             filter_status=PayStatus.REFUND
         )
@@ -155,12 +156,10 @@ class BillingOffer:
         for refund in refunds:
             if refund.status == PayStatus.REFUNDED:
                 payment = refund_payments[payment_counter]
-                #update role ______________-
-                payment.status = PayStatus.REFUNDED
-                await self.crud_billing.update_payment(
-                    payment_id=payment.id,
-                    payment=PaymentBase(**payment.__dict__)
-                )
+                revoked = await subscribe_roles(self.read_marketing, self.crud_billing
+                                                 ).unsubscribe_paid_role(payment)
+                if revoked is True:
+                    await self._update_status_payment(payment, PayStatus.REFUNDED)
                 payment_counter += 1
 
     async def get_payments_for_refund(self, user_id: uuid.UUID
@@ -176,7 +175,7 @@ class BillingOffer:
         )
         return payments
     
-    async def refund_payment(self, user_id: uuid.UUID, payment_id: uuid.UUID
+    async def refund_payment(self, user_id: uuid.UUID, payment_id: uuid.UUID, jti: str
                              ) -> PaymentSchema | None:
         """Refund payment if passible."""
         payments_passible = await self.get_payments_for_refund(user_id)
@@ -190,6 +189,7 @@ class BillingOffer:
         refund = await self.payment_system.create_refund_payment(payment.id_payment)
         payment.status = PayStatus.REFUND
         payment.id_refund = refund.id_refund
+        payment.jti_compromised = jti
         new_payment = await self.crud_billing.update_payment(
             payment_id=payment.id,
             payment=PaymentBase(**payment.__dict__)
@@ -199,16 +199,25 @@ class BillingOffer:
     async def _get_or_create_customer(self, user_id: uuid.UUID) -> CustomerSchema:
         customer = await self.crud_billing.get_customer(user_id)
         if customer is None:
-            # Here read email user
-            email = 'debag@mail.com'
-            # ---------------------
+            email = await rc_client.grpc_auth_user_email(user_id=user_id)
             customer = await self.crud_billing.create_customer(
                 CustomerBase(
                     user_id=user_id,
                     email=email,
                 )
             )
-        return customer 
+        return customer
+
+    async def _update_status_payment(self, payment: PaymentSchema, status: PayStatus, 
+                                     id_payment: str | None = None) -> None:
+        payment.status = status
+        payment.payed_at=datetime.now()
+        if id_payment is not None:
+            payment.id_payment = id_payment
+        await self.crud_billing.update_payment(
+            payment_id=payment.id,
+            payment=PaymentBase(**payment.__dict__)
+        )   
 
 
 @lru_cache()

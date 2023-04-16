@@ -22,6 +22,13 @@ class ApiSettings(BaseSettings):
     payment_hours_refund: int = 1
     stripe_api_key: str = 'sk_test_51MmcI4EDsXu7ZV5DF1l10mZuZC5iGb8W41FrYxXXgMzbS5lQ1w34alOaCNAInpHzHcnIc7hXhabNh8HqlafoCM3O002ye80K06'
     stripe_id_product: str = 'prod_NaetpznQ9m7dyF'
+    auth_grpc_port: int = 50051
+    auth_grpc_host: str = '127.0.0.1'
+    rabbitmq_default_user: str = 'guest'
+    rabbitmq_default_pass: str = 'guest'
+    rabbitmq_default_vhost: str = ''
+    billing_rabbitmq_host: str = '127.0.0.1'
+    billing_rabbitmq_port: int = 5672
 
 
 settings = ApiSettings()

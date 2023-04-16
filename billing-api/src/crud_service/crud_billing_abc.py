@@ -95,7 +95,8 @@ class BaseCrudBilling(ABC):
     async def get_privileged_roles(self,
                                    customer_id: uuid.UUID | None = None,
                                    filter_status: SubStatusEnum | None = None,
-                                   time_after: datetime | None = None,                                 
+                                   time_after: datetime | None = None,
+                                   role: str | None = None,                                 
                                    ) -> list[PrivilegedRoleSchema] | None:
         """Read privileged roles meeting the following filters.
 
@@ -103,4 +104,9 @@ class BaseCrudBilling(ABC):
         - filter_status - subscription status on privileged roles,
         - time_after_expired - more time has passed since the subscription expired. 
         """
+        pass
+
+    @abstractmethod
+    async def get_user_id(self, customer_id: uuid.UUID) -> uuid.UUID | None:
+        """Read user_id with customer_id."""
         pass

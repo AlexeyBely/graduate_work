@@ -53,6 +53,11 @@ class SqlCrudBilling(BaseCrudBilling):
             await session.delete(customer)
             await session.commit()
 
+    async def get_user_id(self, customer_id: uuid.UUID) -> uuid.UUID | None:
+        """Read user_id with customer_id."""
+        customer = await self._read_obj(CustomerModel, CustomerSchema, customer_id)
+        return customer.user_id
+
     # Methods for payment
     async def create_payment(self, payment: PaymentBase) -> PaymentSchema:
         """Create new payment."""
@@ -125,7 +130,8 @@ class SqlCrudBilling(BaseCrudBilling):
     async def get_privileged_roles(self,
                                    customer_id: uuid.UUID | None = None,
                                    filter_status: SubStatusEnum | None = None,
-                                   time_after: datetime | None = None,                                 
+                                   time_after: datetime | None = None,
+                                   role: str | None = None,                                  
                                    ) -> list[PrivilegedRoleSchema] | None:
         """Read privileged roles meeting the following filters.
 
@@ -142,6 +148,8 @@ class SqlCrudBilling(BaseCrudBilling):
             if time_after is not None:
                 check_time = datetime.now() - time_after
                 stmt = stmt.where(PrivilegedRoleModel.end_payment < check_time)
+            if role is not None:
+                stmt = stmt.where(PrivilegedRoleModel.role_payment == role)
             result = await session.execute(
                 stmt.order_by(PrivilegedRoleModel.end_payment)
             )

@@ -15,6 +15,8 @@ ALLOWED_HOSTS = [
     'admin-billing',
 ]
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:82', 'http://127.0.0.1:8002']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

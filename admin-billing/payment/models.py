@@ -80,7 +80,9 @@ class Payment(UUIDMixin):
     id_payment = models.TextField('id_payment', blank=True, null=True)
     id_checkout = models.TextField('id_checkout', blank=True, null=True)
     id_refund = models.TextField('id_refund', blank=True, null=True)
-    card = models.TextField('card', blank=True, null=True)
+    card = models.CharField('card', max_length=MAX_LENGTH_NAME, blank=True, null=True)
+    jti_compromised = models.CharField('jti_compromised', max_length=MAX_LENGTH_NAME, 
+                                       blank=True, null=True)
 
     class Meta:
         db_table = 'billing\".\"payment'

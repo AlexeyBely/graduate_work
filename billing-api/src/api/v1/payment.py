@@ -86,6 +86,7 @@ async def get_url_payment(
     url = await billing.get_payment_url(
         apply_promocode=body.apply_promocode,
         user_id=user_id,
+        jti=token_data.jti,
         role_payment=body.role_payment,
         amount_months=body.amount_months,
         promocode_code=body.promocode,
@@ -131,6 +132,7 @@ async def refund_payment(
     new_payment = await billing.refund_payment(
         user_id=user_id,
         payment_id=body.payment_id,
+        jti=token_data.jti
     )
     if new_payment is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, 
@@ -149,4 +151,5 @@ async def get_url_payment(
     billing: BillingOffer = Depends(get_billing_offer),
 ) -> None:
     await billing.check_payments()
+    await billing.check_refunds()
     return None

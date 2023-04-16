@@ -25,3 +25,4 @@ class TariffSchema(BaseModel):
     role: str
     description: str | None   
     price: float
+    auth_role_id: UUID4
