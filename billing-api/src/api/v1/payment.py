@@ -3,15 +3,15 @@ from fastapi import APIRouter, Depends, HTTPException, Body, status
 from fastapi.responses import Response
 import uuid
 
+import api.messages as messages
 from schemas.offer_schemas import (QueryOfferRole, ResponseStatusRole, RequestRefund,
                                    RequestPaymentOffer, ResponsePaymentOffer, RoleOffer)
 from schemas.billing_schemas import SubStatusEnum, PaymentSchema
 from crud_service.crud_billing_abc import BaseCrudBilling
 from crud_service.crud_dependency import get_crud_billing
 from billing.billing_offer import get_billing_offer, BillingOffer
-
 from api.v1.auth import TokenData, authenticate
-import api.messages as messages
+from app_celery import load_payment_system
 
 
 router = APIRouter()
@@ -141,15 +141,11 @@ async def refund_payment(
 
 
 @router.post(
-    '/check-payments',
+    '/web-hook',
     response_model=None,
     summary='Check payments',
     description='Check payments in payment system',
     response_description='Null',
 )
-async def get_url_payment(
-    billing: BillingOffer = Depends(get_billing_offer),
-) -> None:
-    await billing.check_payments()
-    await billing.check_refunds()
-    return None
+async def get_url_payment() -> None:
+    load_payment_system.delay()

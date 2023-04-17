@@ -20,6 +20,7 @@ class ApiSettings(BaseSettings):
     payment_success_url: str = 'https://ya.ru/'
     payment_smallest_currency: int = 100
     payment_hours_refund: int = 1
+    payment_days_expired: int = 2
     stripe_api_key: str = 'sk_test_51MmcI4EDsXu7ZV5DF1l10mZuZC5iGb8W41FrYxXXgMzbS5lQ1w34alOaCNAInpHzHcnIc7hXhabNh8HqlafoCM3O002ye80K06'
     stripe_id_product: str = 'prod_NaetpznQ9m7dyF'
     auth_grpc_port: int = 50051
