@@ -43,4 +43,3 @@ class TariffModel(Base):
     description = Column(String, nullable=True)    
     price = Column(Float)
     auth_role_id = Column(UUID(as_uuid=True), unique=True)
-    

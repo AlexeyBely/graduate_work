@@ -30,7 +30,7 @@ class BillingOffer:
         """Offer for personal and monthly discounts or promocode."""
         if not apply_promocode:
             offer = await self.offer_from_user(
-                user_id = user_id, 
+                user_id=user_id, 
                 role_payment=role_payment,
                 amount_months=amount_months
             )
@@ -39,7 +39,6 @@ class BillingOffer:
                 promocode_code=promocode_code
             )
         return offer
-
 
     async def offer_from_user(self, user_id: uuid.UUID, role_payment: str, 
                               amount_months: int) -> RoleOffer | None:
@@ -89,7 +88,7 @@ class BillingOffer:
     
     async def get_payment_url(self, apply_promocode: bool, user_id: uuid.UUID, jti: str,
                               role_payment: str, amount_months: int, promocode_code: str
-                             ) -> str | None:
+                              ) -> str | None:
         """Return url payment and create object payment in billing service."""
         offer = await self.get_offer(
             apply_promocode=apply_promocode,
@@ -142,7 +141,8 @@ class BillingOffer:
                 provided = await subscribe_roles(self.read_marketing, self.crud_billing
                                                  ).subscribe_paid_role(payment)
                 if provided is True:
-                    await self._update_status_payment(payment, PayStatus.PAID, checkout.id_payment)
+                    await self._update_status_payment(payment, PayStatus.PAID, 
+                                                      checkout.id_payment)
                 payment_counter += 1
 
     async def check_refunds(self) -> None:
@@ -156,8 +156,10 @@ class BillingOffer:
         for refund in refunds:
             if refund.status == PayStatus.REFUNDED:
                 payment = refund_payments[payment_counter]
-                revoked = await subscribe_roles(self.read_marketing, self.crud_billing
-                                                 ).unsubscribe_paid_role(payment)
+                revoked = await subscribe_roles(
+                    self.read_marketing, 
+                    self.crud_billing
+                ).unsubscribe_paid_role(payment)
                 if revoked is True:
                     await self._update_status_payment(payment, PayStatus.REFUNDED)
                 payment_counter += 1
@@ -211,7 +213,7 @@ class BillingOffer:
     async def _update_status_payment(self, payment: PaymentSchema, status: PayStatus, 
                                      id_payment: str | None = None) -> None:
         payment.status = status
-        payment.payed_at=datetime.now()
+        payment.payed_at = datetime.now()
         if id_payment is not None:
             payment.id_payment = id_payment
         await self.crud_billing.update_payment(
@@ -225,5 +227,3 @@ def get_billing_offer() -> BillingOffer:
     return BillingOffer(read_marketing=get_crud_marketing(),
                         crud_billing=get_crud_billing(),
                         payment_system=get_payment_service())
-            
-

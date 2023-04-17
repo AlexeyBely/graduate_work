@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import UUID, desc
+from sqlalchemy import desc
 
 from schemas.marketing_schemas import (TariffSchema, PersonalDiscountSchema, 
                                        MonthsDiscountSchema, PromocodeSchema)
@@ -39,8 +39,8 @@ class SqlReadMarketing(BaseReadMarketing):
                                     ) -> PersonalDiscountSchema | None:
         """Read personal discount at user_id."""
         async with self.async_session() as session:
-            stmt = select(PersonalDiscountModel).where(PersonalDiscountModel.user_id
-                                                        == user_id)
+            stmt = select(PersonalDiscountModel).where(
+                PersonalDiscountModel.user_id == user_id)
             result = await session.execute(stmt)
             discount = result.scalars().first()
             if discount is None:
@@ -55,14 +55,14 @@ class SqlReadMarketing(BaseReadMarketing):
             if discounts is None:
                 return None
             return [MonthsDiscountSchema(**discount.__dict__) for discount in discounts]
-    
 
     async def get_months_discount(self, amount_months: int
                                   ) -> MonthsDiscountSchema | None:
         """Read discount at amount months."""
         async with self.async_session() as session:
-            stmt = select(MonthsDiscountModel).where(MonthsDiscountModel.amount_months
-                <= amount_months).order_by(desc(MonthsDiscountModel.amount_months))
+            stmt = select(MonthsDiscountModel).where(
+                MonthsDiscountModel.amount_months <= amount_months
+            ).order_by(desc(MonthsDiscountModel.amount_months))
             result = await session.execute(stmt)
             discount = result.scalars().first()
             if discount is None:

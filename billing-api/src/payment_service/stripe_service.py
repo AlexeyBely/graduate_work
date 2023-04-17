@@ -1,6 +1,4 @@
-import uuid
 from async_stripe import stripe
-#import logging
 
 from core.config import settings
 from payment_service.payment_service_abs import BasePaymentService
@@ -8,7 +6,6 @@ from schemas.payment import CheckoutPayment, RefundPayment
 from schemas.billing_schemas import PayStatus
 
 
-#logger = logging.getLogger('')
 stripe.api_key = settings.stripe_api_key
 
 
@@ -40,7 +37,7 @@ class StripeService(BasePaymentService):
             success_url=settings.payment_success_url,
             client_reference_id=client_id,
             currency=self.currency,
-            )
+        )
         return CheckoutPayment(
             id_checkout=checkout.id,
             url=checkout.url,

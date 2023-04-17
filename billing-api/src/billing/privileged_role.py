@@ -1,5 +1,4 @@
 import uuid
-import calendar
 from datetime import datetime, timedelta
 
 from core.config import settings
@@ -59,10 +58,37 @@ class SubscribePrivilegedRoles:
             if result is False:
                 return False
         await self.crud_billing.update_privileged_role(
-                privel_role_id=role.id,
-                privel_role=PrivilegedRoleBase(**role.__dict__)
-            )
+            privel_role_id=role.id,
+            privel_role=PrivilegedRoleBase(**role.__dict__)
+        )
         return True
+    
+    async def check_end_subscribe(self) -> None:
+        """Check subscription expiration."""        
+        roles = await self.crud_billing.get_privileged_roles(   
+            filter_status=SubStatusEnum.SUBSCRIBE,
+            time_after=timedelta(days=settings.payment_days_expired)
+        )
+        for role in roles:            
+            user_id, tariff = await self._get_user_and_tariff(role)
+            result = await rc_client.grpc_auth_revoke_role(
+                user_id=user_id,
+                role_id=tariff.auth_role_id,
+                jti=str(uuid.uuid4())
+            )
+            if result is True:
+                role.status = SubStatusEnum.EXPIRED
+                await self.crud_billing.update_privileged_role(
+                    privel_role_id=role.id,
+                    privel_role=PrivilegedRoleBase(**role.__dict__)
+                )        
+        roles = await self.crud_billing.get_privileged_roles( 
+            filter_status=SubStatusEnum.SUBSCRIBE,
+            time_after=timedelta(minutes=1)
+        )
+        for role in roles:
+            user_id, tariff = await self._get_user_and_tariff(role)
+            print(f'Expired role {role.role_payment} for user {user_id}')
 
     async def _provided_revoked_role(self, provided: bool, payment: PaymentSchema
                                      ) -> bool:
@@ -96,7 +122,8 @@ class SubscribePrivilegedRoles:
             month = month + 12
         return end_payment.replace(year=year, month=month, tzinfo=None)
 
-    async def _get_payment_role(self, payment: PaymentSchema) -> PrivilegedRoleSchema | None:
+    async def _get_payment_role(self, payment: PaymentSchema
+                                ) -> PrivilegedRoleSchema | None:
         roles = await self.crud_billing.get_privileged_roles(
             customer_id=payment.customer_id,
             role=payment.role_payment
@@ -104,6 +131,11 @@ class SubscribePrivilegedRoles:
         if len(roles) == 0:
             return None
         return roles[0]
+    
+    async def _get_user_and_tariff(self, role: PrivilegedRoleSchema) -> tuple:
+        user_id = await self.crud_billing.get_user_id(role.customer_id)
+        tariff = await self.read_marketing.get_role_tariff(role.role_payment)
+        return user_id, tariff
     
 
 def subscribe_roles(read_marketing: BaseReadMarketing, crud_billing: BaseCrudBilling

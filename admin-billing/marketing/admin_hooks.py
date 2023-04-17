@@ -1,4 +1,3 @@
-import json
 from django.contrib import admin
 
 from marketing.models import Tariff

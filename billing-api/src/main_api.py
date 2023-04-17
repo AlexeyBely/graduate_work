@@ -1,6 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 from api.v1 import payment, marketing
 from core.config import settings
@@ -28,4 +27,5 @@ async def shutdown():
 
 
 app.include_router(payment.router, prefix='/billing/api/v1/payment', tags=['payment'])
-app.include_router(marketing.router, prefix='/billing/api/v1/marketing', tags=['marketing'])
+app.include_router(marketing.router, prefix='/billing/api/v1/marketing', 
+                   tags=['marketing'])

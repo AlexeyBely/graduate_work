@@ -1,6 +1,4 @@
 from functools import lru_cache
-from fastapi import Depends
-from sqlalchemy.orm import Session
 
 from crud_service.read_marketing_sql import SqlReadMarketing
 from crud_service.crud_billing_sql import SqlCrudBilling
