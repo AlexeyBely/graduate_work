@@ -36,8 +36,8 @@ jobs:
 
     - name: Run flake8/styleguide
       run: |
-        flake8 notify-api --config=setup.cfg --exit-zero --format=html --htmldir=reports/styleguide_reports/billing-api
-        flake8 admin-notify --config=setup.cfg --exit-zero --format=html --htmldir=reports/styleguide_reports/admin-billing
+        flake8 billing-api --config=setup.cfg --exit-zero --format=html --htmldir=reports/styleguide_reports/billing-api
+        flake8 admin-billing --config=setup.cfg --exit-zero --format=html --htmldir=reports/styleguide_reports/admin-billing
         
     - name: Upload reports
       uses: actions/upload-artifact@v3
