@@ -46,5 +46,4 @@ class ResponsePaymentOffer(BaseModel):
 
 class RequestRefund(BaseModel):
     payment_id: UUID4 = Field('xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx', 
-                            description='ID payment')
-
+                              description='ID payment')

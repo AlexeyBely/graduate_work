@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import UUID, desc
 
 from schemas.billing_schemas import (CustomerSchema, PrivilegedRoleSchema,
                                      PaymentSchema, PayStatus, SubStatusEnum,
@@ -158,7 +157,6 @@ class SqlCrudBilling(BaseCrudBilling):
                 return None
             return [PrivilegedRoleSchema(**role.__dict__) for role in privil_roles]
 
-
     # Utils methods    
     async def _execute_customer(self, session: AsyncSession, user_id: uuid.UUID
                                 ) -> CustomerModel | None:
@@ -199,5 +197,3 @@ class SqlCrudBilling(BaseCrudBilling):
             model_obj = result.scalars().one()
             await session.delete(model_obj)
             await session.commit()
-        
-   

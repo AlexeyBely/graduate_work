@@ -40,7 +40,7 @@ class PersonalDiscount(IdMixin):
         verbose_name_plural = _('personal_discounts')
         constraints = [
             models.UniqueConstraint(
-                fields=['user_id',],
+                fields=['user_id', ],
                 name='personal_discount_unique'
             ),
         ]

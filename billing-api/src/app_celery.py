@@ -1,8 +1,6 @@
-import asyncio
 import logging
 from asgiref.sync import async_to_sync
 from celery import Celery
-from celery.schedules import crontab
 
 from core.config import settings
 from billing.billing_offer import get_billing_offer

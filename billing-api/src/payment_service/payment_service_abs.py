@@ -28,4 +28,3 @@ class BasePaymentService(ABC):
     async def get_refunds(self, refunds_idx: list[str]) -> list[RefundPayment] | None:
         """Return refund list."""
         pass
-

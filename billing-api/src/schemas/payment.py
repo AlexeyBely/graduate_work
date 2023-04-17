@@ -15,6 +15,3 @@ class CheckoutPayment(BaseModel):
 class RefundPayment(BaseModel):
     id_refund: str
     status: PayStatus
-
-
-

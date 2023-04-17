@@ -1,5 +1,4 @@
 import uuid
-import calendar
 from datetime import datetime, timedelta
 
 from core.config import settings
@@ -59,15 +58,14 @@ class SubscribePrivilegedRoles:
             if result is False:
                 return False
         await self.crud_billing.update_privileged_role(
-                privel_role_id=role.id,
-                privel_role=PrivilegedRoleBase(**role.__dict__)
-            )
+            privel_role_id=role.id,
+            privel_role=PrivilegedRoleBase(**role.__dict__)
+        )
         return True
     
     async def check_end_subscribe(self) -> None:
-        """Check subscription expiration."""
-        #Expired + added days
-        roles = await self.crud_billing.get_privileged_roles(
+        """Check subscription expiration."""        
+        roles = await self.crud_billing.get_privileged_roles(   
             filter_status=SubStatusEnum.SUBSCRIBE,
             time_after=timedelta(days=settings.payment_days_expired)
         )
@@ -83,9 +81,8 @@ class SubscribePrivilegedRoles:
                 await self.crud_billing.update_privileged_role(
                     privel_role_id=role.id,
                     privel_role=PrivilegedRoleBase(**role.__dict__)
-                )
-        #Expired
-        roles = await self.crud_billing.get_privileged_roles(
+                )        
+        roles = await self.crud_billing.get_privileged_roles( 
             filter_status=SubStatusEnum.SUBSCRIBE,
             time_after=timedelta(minutes=1)
         )
@@ -125,7 +122,8 @@ class SubscribePrivilegedRoles:
             month = month + 12
         return end_payment.replace(year=year, month=month, tzinfo=None)
 
-    async def _get_payment_role(self, payment: PaymentSchema) -> PrivilegedRoleSchema | None:
+    async def _get_payment_role(self, payment: PaymentSchema
+                                ) -> PrivilegedRoleSchema | None:
         roles = await self.crud_billing.get_privileged_roles(
             customer_id=payment.customer_id,
             role=payment.role_payment

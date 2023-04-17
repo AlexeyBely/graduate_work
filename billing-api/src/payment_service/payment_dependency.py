@@ -1,5 +1,4 @@
 from functools import lru_cache
-from fastapi import Depends
 
 from payment_service.stripe_service import StripeService
 

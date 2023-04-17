@@ -1,7 +1,6 @@
-from http import HTTPStatus
-from fastapi import APIRouter, Depends, HTTPException, Body, status
-from fastapi.responses import Response
 import uuid
+from http import HTTPStatus
+from fastapi import APIRouter, Depends, HTTPException, Body
 
 import api.messages as messages
 from schemas.offer_schemas import (QueryOfferRole, ResponseStatusRole, RequestRefund,
@@ -147,5 +146,5 @@ async def refund_payment(
     description='Check payments in payment system',
     response_description='Null',
 )
-async def get_url_payment() -> None:
+async def web_hook() -> None:
     load_payment_system.delay()
