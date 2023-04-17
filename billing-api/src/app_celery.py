@@ -25,12 +25,10 @@ app = Celery('billing', broker=url_broker)
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    # Periodic task 15c
-    sender.add_periodic_task(15.0, 
+    sender.add_periodic_task(settings.check_payment_system_period, 
                              load_payment_system.s(), 
                              name='load from payment system')    
-    # Periodic task 25c
-    sender.add_periodic_task(25.0, 
+    sender.add_periodic_task(settings.check_subscribe_period, 
                              check_subscribe.s(), 
                              name='check subscription expiration')
 

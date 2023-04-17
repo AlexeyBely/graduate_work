@@ -147,4 +147,4 @@ async def refund_payment(
     response_description='Null',
 )
 async def web_hook() -> None:
-    load_payment_system.delay()
+    load_payment_system.apply_async()

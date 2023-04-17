@@ -7,6 +7,8 @@ from crud_service.crud_billing_abc import BaseCrudBilling
 from schemas.billing_schemas import (PrivilegedRoleBase, PrivilegedRoleSchema, 
                                      SubStatusEnum, PaymentSchema)
 from grpc_service.auth_service import roles_control_client as rc_client
+from grpc_service.notify_service import message_sender_client as ms_client
+from grpc_service.notify_service.message_sender_client import SubscribeMessage
 
 
 class SubscribePrivilegedRoles:
@@ -23,7 +25,7 @@ class SubscribePrivilegedRoles:
         """
         role = await self._get_payment_role(payment)
         if role is None:
-            await self.crud_billing.create_privileged_role(
+            role = await self.crud_billing.create_privileged_role(
                 PrivilegedRoleBase(
                     customer_id=payment.customer_id,
                     status=SubStatusEnum.SUBSCRIBE,
@@ -41,7 +43,7 @@ class SubscribePrivilegedRoles:
                 privel_role_id=role.id,
                 privel_role=PrivilegedRoleBase(**role.__dict__)
             )
-        return await self._provided_revoked_role(True, payment)
+        return await self._provided_revoked_role(True, payment, role)
 
     async def unsubscribe_paid_role(self, payment: PaymentSchema) -> bool:
         """Unsubscribe to Paid Preferred Role.
@@ -54,7 +56,7 @@ class SubscribePrivilegedRoles:
         role.end_payment = self._payment_months(False, payment, role.end_payment)
         if role.end_payment < datetime.now():
             role.status = SubStatusEnum.EXPIRED
-            result = await self._provided_revoked_role(False, payment)
+            result = await self._provided_revoked_role(False, payment, role)
             if result is False:
                 return False
         await self.crud_billing.update_privileged_role(
@@ -81,25 +83,49 @@ class SubscribePrivilegedRoles:
                 await self.crud_billing.update_privileged_role(
                     privel_role_id=role.id,
                     privel_role=PrivilegedRoleBase(**role.__dict__)
-                )        
+                )
+            await ms_client.grpc_notify_send_message(
+                message_type=SubscribeMessage.SUBSCRIBE_BLOKED,
+                user_id=user_id,
+                role_descript=tariff.description,
+                end_subscribe=role.end_payment
+            )       
         roles = await self.crud_billing.get_privileged_roles( 
             filter_status=SubStatusEnum.SUBSCRIBE,
             time_after=timedelta(minutes=1)
         )
         for role in roles:
             user_id, tariff = await self._get_user_and_tariff(role)
-            print(f'Expired role {role.role_payment} for user {user_id}')
+            await ms_client.grpc_notify_send_message(
+                message_type=SubscribeMessage.SUBSCRIBE_END,
+                user_id=user_id,
+                role_descript=tariff.description,
+                end_subscribe=role.end_payment
+            )
 
-    async def _provided_revoked_role(self, provided: bool, payment: PaymentSchema
-                                     ) -> bool:
+    async def _provided_revoked_role(self, provided: bool, payment: PaymentSchema,
+                                     role: PrivilegedRoleSchema) -> bool:
         user_id = await self.crud_billing.get_user_id(payment.customer_id)
         tariff = await self.read_marketing.get_role_tariff(payment.role_payment)
+
         if provided is True:
+            await ms_client.grpc_notify_send_message(
+                message_type=SubscribeMessage.SUBSCRIBED,
+                user_id=user_id,
+                role_descript=tariff.description,
+                end_subscribe=role.end_payment
+            )
             return await rc_client.grpc_auth_provide_role(
                 user_id=user_id,
                 role_id=tariff.auth_role_id,
                 jti=payment.jti_compromised
             )
+        await ms_client.grpc_notify_send_message(
+            message_type=SubscribeMessage.SUBSCRIBE_BLOKED,
+            user_id=user_id,
+            role_descript=tariff.description,
+            end_subscribe=role.end_payment
+        )
         return await rc_client.grpc_auth_revoke_role(
             user_id=user_id,
             role_id=tariff.auth_role_id,

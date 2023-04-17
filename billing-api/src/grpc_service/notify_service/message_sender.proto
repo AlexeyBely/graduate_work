@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package messagesender ;
+
+
+service MessageSender {
+
+  rpc SendBillingMessage(BillingMessage) returns (OperationResult) {}
+  // Send message from billing service
+}
+
+
+message BillingMessage {
+  int32 template_num = 1;
+  string user_id = 2;
+  string role_description = 3;
+  string end_payment = 4; 
+}
+
+message OperationResult {
+    bool successful = 1;
+  }
