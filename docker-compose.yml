@@ -14,6 +14,8 @@ services:
       POSTGRES_DB: "${BILLING_POSTGRES_DB}"
       POSTGRES_USER: "${BILLING_POSTGRES_USER}"
       POSTGRES_PASSWORD: "${BILLING_POSTGRES_PASSWORD}"
+    ports:
+      - "5432:5432"
 
   admin-billing:
     build:
@@ -39,7 +41,7 @@ services:
     image: billing_api:1.0
     container_name: ${BILLING_API_HOST}
     entrypoint: >
-      sh -c "uvicorn main_api:app --host 0.0.0.0 --port $BILLING_API_PORT"
+      sh -c "gunicorn main_api:app --bind 0.0.0.0:$BILLING_API_PORT --worker-class uvicorn.workers.UvicornH11Worker"
     env_file:
       - ./.env
     depends_on:
@@ -57,13 +59,24 @@ services:
     env_file:
       - .env
     entrypoint: >
-      sh -c "celery -A app_celery worker -B --loglevel=info"
-    expose:
-      - ${BILLING_WORKER_PORT}
+      sh -c "celery -A app_celery worker --loglevel=info"
     depends_on:
       - rabbitmq
       - psql
       - billing-api
+
+  beat:
+    image: billing_api:1.0
+    container_name: ${BILLING_BEAT_HOST}
+    env_file:
+      - .env
+    entrypoint: >
+      sh -c "celery -A app_celery beat --loglevel=info"
+    depends_on:
+      - rabbitmq
+      - psql
+      - billing-api
+      - worker
 
   nginx:
     image: nginx:latest
@@ -83,5 +96,3 @@ networks:
   default:
     name: movies_networks
     external: true
-
-

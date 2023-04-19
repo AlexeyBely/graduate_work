@@ -29,3 +29,8 @@ async def shutdown():
 app.include_router(payment.router, prefix='/billing/api/v1/payment', tags=['payment'])
 app.include_router(marketing.router, prefix='/billing/api/v1/marketing', 
                    tags=['marketing'])
+
+
+import uvicorn
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8999)

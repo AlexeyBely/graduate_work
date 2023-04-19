@@ -10,12 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env_settings.secret_key
 DEBUG = env_settings.debug
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'admin-billing',
-]
+ALLOWED_HOSTS = env_settings.allowed_hosts_parse
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:82', 'http://127.0.0.1:8002']
+CSRF_TRUSTED_ORIGINS = env_settings.csrf_trusted_parse
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -12,6 +12,17 @@ class EnvSettings(BaseSettings):
     admin_timezone: str = 'Europe/Moscow'
     auth_grpc_port: int = 50051
     auth_grpc_host: str = '127.0.0.1'
+    admin_allowed_hosts: str = '127.0.0.1'
+    allowed_hosts_parse: list[str] | None = None
+    admin_csrf_trusted: str = 'http://127.0.0.1:8000'
+    csrf_trusted_parse: list[str] | None = None
 
+    @root_validator
+    def parse_env_var(cls, values):
+        val = values['admin_allowed_hosts']
+        values['allowed_hosts_parse'] = [v for v in val.split(', ')]
+        val = values['admin_csrf_trusted']
+        values['csrf_trusted_parse'] = [v for v in val.split(', ')]
+        return values
 
 env_settings = EnvSettings()

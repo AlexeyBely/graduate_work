@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 
@@ -7,16 +7,15 @@ from schemas.auth import TokenData
 
 
 http_scheme = HTTPBearer()
-router = APIRouter()
 
 
 async def authenticate(
     credentials: HTTPAuthorizationCredentials = Depends(http_scheme)
 ) -> TokenData:
     try:
-        Jwt_token = credentials.credentials.encode('UTF-8')
+        jwt_token = credentials.credentials
         payload = jwt.decode(
-            Jwt_token,
+            jwt_token,
             settings.access_token_secret_key,
             algorithms=[settings.token_algoritm],
         )

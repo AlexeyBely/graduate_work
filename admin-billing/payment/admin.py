@@ -35,4 +35,9 @@ class CustomerAdmin(admin.ModelAdmin):
     
     get_privileged_roles.short_description = _('Role')
 
+
+admin.site.site_header = 'Администрирование оплаты' 
+admin.site.index_title = 'Администрирование оплаты'               
+admin.site.site_title = 'Администрирование оплаты' 
+
      

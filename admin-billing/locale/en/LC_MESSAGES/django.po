@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-31 12:00+0300\n"
+"POT-Creation-Date: 2023-04-18 20:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1221,159 +1221,167 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: marketing/models.py:17 marketing/models.py:62 payment/models.py:57
-#: payment/models.py:95
+#: marketing/apps.py:8
+msgid "marketing"
+msgstr ""
+
+#: marketing/models.py:17 marketing/models.py:70 payment/admin.py:36
+#: payment/models.py:37 payment/models.py:69
 msgid "Role"
 msgstr ""
 
-#: marketing/models.py:18 marketing/models.py:61
+#: marketing/models.py:18 marketing/models.py:69
 msgid "Description"
 msgstr ""
 
-#: marketing/models.py:19 payment/models.py:101
+#: marketing/models.py:19 payment/models.py:77
 msgid "Price"
 msgstr ""
 
-#: marketing/models.py:23
+#: marketing/models.py:20
+msgid "ID_auth_role"
+msgstr ""
+
+#: marketing/models.py:25
 msgid "tariff"
 msgstr ""
 
-#: marketing/models.py:24
+#: marketing/models.py:26
 msgid "tariffs"
 msgstr ""
 
-#: marketing/models.py:32 payment/models.py:20
+#: marketing/models.py:34 payment/models.py:98
 msgid "ID_user"
 msgstr ""
 
-#: marketing/models.py:33 marketing/models.py:47 marketing/models.py:63
+#: marketing/models.py:35 marketing/models.py:55 marketing/models.py:71
 msgid "Discount"
 msgstr ""
 
-#: marketing/models.py:37
+#: marketing/models.py:39
 msgid "personal_discount"
 msgstr ""
 
-#: marketing/models.py:38
+#: marketing/models.py:40
 msgid "personal_discounts"
 msgstr ""
 
-#: marketing/models.py:46 marketing/models.py:64 payment/models.py:96
+#: marketing/models.py:54 marketing/models.py:72 payment/models.py:70
 msgid "Months"
 msgstr ""
 
-#: marketing/models.py:51
+#: marketing/models.py:59
 msgid "months_discount"
 msgstr ""
 
-#: marketing/models.py:52
+#: marketing/models.py:60
 msgid "months_discounts"
 msgstr ""
 
-#: marketing/models.py:60 payment/models.py:100
+#: marketing/models.py:68 payment/models.py:75
 msgid "Promocode"
 msgstr ""
 
-#: marketing/models.py:65
+#: marketing/models.py:73
 msgid "Expiration"
 msgstr ""
 
-#: marketing/models.py:69
+#: marketing/models.py:77
 msgid "promocode"
 msgstr ""
 
-#: marketing/models.py:70
+#: marketing/models.py:78
 msgid "promocodes"
 msgstr ""
 
-#: payment/admin.py:32 payment/models.py:63
-msgid "privileged_roles"
-msgstr ""
-
-#: payment/models.py:21
-msgid "Email"
-msgstr ""
-
-#: payment/models.py:25
-msgid "customer"
-msgstr ""
-
-#: payment/models.py:26 payment/models.py:50 payment/models.py:88
-msgid "customers"
-msgstr ""
-
-#: payment/models.py:42
-msgid "created"
-msgstr ""
-
-#: payment/models.py:43
-msgid "subscribe"
-msgstr ""
-
-#: payment/models.py:44
-msgid "expired"
-msgstr ""
-
-#: payment/models.py:45
-msgid "blocked"
-msgstr ""
-
-#: payment/models.py:53 payment/models.py:91
-msgid "Status"
-msgstr ""
-
-#: payment/models.py:58
-msgid "End payment"
-msgstr ""
-
-#: payment/models.py:62
-msgid "privileged_role"
-msgstr ""
-
-#: payment/models.py:79
-msgid "billed"
-msgstr ""
-
-#: payment/models.py:80
-msgid "paid"
-msgstr ""
-
-#: payment/models.py:81
-msgid "billed_timeout"
-msgstr ""
-
-#: payment/models.py:82
-msgid "refund"
-msgstr ""
-
-#: payment/models.py:83
-msgid "refunded"
-msgstr ""
-
-#: payment/models.py:97
-msgid "Payed"
-msgstr ""
-
-#: payment/models.py:98
-msgid "Personal discount"
-msgstr ""
-
-#: payment/models.py:99
-msgid "Months discount"
-msgstr ""
-
-#: payment/models.py:102
-msgid "Amount"
-msgstr ""
-
-#: payment/models.py:103
-msgid "Currency"
-msgstr ""
-
-#: payment/models.py:111
+#: payment/apps.py:8 payment/models.py:89
 msgid "payment"
 msgstr ""
 
-#: payment/models.py:112
+#: payment/models.py:22
+msgid "created"
+msgstr ""
+
+#: payment/models.py:23
+msgid "subscribe"
+msgstr ""
+
+#: payment/models.py:24
+msgid "expired"
+msgstr ""
+
+#: payment/models.py:25
+msgid "blocked"
+msgstr ""
+
+#: payment/models.py:30 payment/models.py:62 payment/models.py:104
+msgid "customers"
+msgstr ""
+
+#: payment/models.py:33 payment/models.py:65
+msgid "Status"
+msgstr ""
+
+#: payment/models.py:38
+msgid "End payment"
+msgstr ""
+
+#: payment/models.py:42
+msgid "privileged_role"
+msgstr ""
+
+#: payment/models.py:43
+msgid "privileged_roles"
+msgstr ""
+
+#: payment/models.py:53
+msgid "billed"
+msgstr ""
+
+#: payment/models.py:54
+msgid "paid"
+msgstr ""
+
+#: payment/models.py:55
+msgid "billed_timeout"
+msgstr ""
+
+#: payment/models.py:56
+msgid "refund"
+msgstr ""
+
+#: payment/models.py:57
+msgid "refunded"
+msgstr ""
+
+#: payment/models.py:71
+msgid "Payed"
+msgstr ""
+
+#: payment/models.py:72
+msgid "Personal discount"
+msgstr ""
+
+#: payment/models.py:74
+msgid "Months discount"
+msgstr ""
+
+#: payment/models.py:78
+msgid "Amount"
+msgstr ""
+
+#: payment/models.py:79
+msgid "Currency"
+msgstr ""
+
+#: payment/models.py:90
 msgid "payments"
+msgstr ""
+
+#: payment/models.py:99
+msgid "Email"
+msgstr ""
+
+#: payment/models.py:103
+msgid "customer"
 msgstr ""

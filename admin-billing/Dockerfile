@@ -1,5 +1,8 @@
 FROM python:3.10.5
 
+RUN apt-get update \
+    && apt-get install -y gettext netcat \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE 1 \
@@ -9,10 +12,7 @@ ENV PYTHONDONTWRITEBYTECODE 1 \
     UWSGI_HARAKIRI 240
 
 COPY requirements.txt .
-
-RUN apt-get update \
-    && apt install -y curl netcat \
-    && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
