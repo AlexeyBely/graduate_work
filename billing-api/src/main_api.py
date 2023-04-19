@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from api.v1 import payment, marketing
+from api.v1 import marketing, payment
 from core.config import settings
 from db import psql_async
-
 
 app = FastAPI(
     title=f'{settings.project_name} service',
@@ -32,5 +31,6 @@ app.include_router(marketing.router, prefix='/billing/api/v1/marketing',
 
 
 import uvicorn
+
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8999)

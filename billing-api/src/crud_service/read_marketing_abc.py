@@ -1,8 +1,9 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from schemas.marketing_schemas import (TariffSchema, PersonalDiscountSchema, 
-                                       MonthsDiscountSchema, PromocodeSchema)
+from schemas.marketing_schemas import (MonthsDiscountSchema,
+                                       PersonalDiscountSchema, PromocodeSchema,
+                                       TariffSchema)
 
 
 class BaseReadMarketing(ABC):

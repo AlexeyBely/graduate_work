@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from marketing.models import Tariff
-from marketing.grpc_auth_service.roles_control_client import (create_new_role, 
+from marketing.grpc_auth_service.roles_control_client import (create_new_role,
                                                               update_role)
+from marketing.models import Tariff
 
 
 class HookTariffAdmin(admin.ModelAdmin):

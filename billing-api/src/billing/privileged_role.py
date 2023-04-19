@@ -2,13 +2,13 @@ import uuid
 from datetime import datetime, timedelta
 
 from core.config import settings
-from crud_service.read_marketing_abc import BaseReadMarketing
 from crud_service.crud_billing_abc import BaseCrudBilling
-from schemas.billing_schemas import (PrivilegedRoleBase, PrivilegedRoleSchema, 
-                                     SubStatusEnum, PaymentSchema)
+from crud_service.read_marketing_abc import BaseReadMarketing
 from grpc_service.auth_service import roles_control_client as rc_client
 from grpc_service.notify_service import message_sender_client as ms_client
 from grpc_service.notify_service.message_sender_client import SubscribeMessage
+from schemas.billing_schemas import (PaymentSchema, PrivilegedRoleBase,
+                                     PrivilegedRoleSchema, SubStatusEnum)
 
 
 class SubscribePrivilegedRoles:

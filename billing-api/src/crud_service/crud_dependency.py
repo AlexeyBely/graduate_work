@@ -1,7 +1,7 @@
 from functools import lru_cache
 
-from crud_service.read_marketing_sql import SqlReadMarketing
 from crud_service.crud_billing_sql import SqlCrudBilling
+from crud_service.read_marketing_sql import SqlReadMarketing
 from db.psql_async import session_psql_async
 
 

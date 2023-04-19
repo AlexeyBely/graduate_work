@@ -4,11 +4,12 @@ from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from schemas.billing_schemas import (CustomerSchema, PrivilegedRoleSchema,
-                                     PaymentSchema, PayStatus, SubStatusEnum,
-                                     CustomerBase, PrivilegedRoleBase, PaymentBase)
 from crud_service.crud_billing_abc import BaseCrudBilling
-from models.billing import CustomerModel, PrivilegedRoleModel, PaymentModel
+from models.billing import CustomerModel, PaymentModel, PrivilegedRoleModel
+from schemas.billing_schemas import (CustomerBase, CustomerSchema, PaymentBase,
+                                     PaymentSchema, PayStatus,
+                                     PrivilegedRoleBase, PrivilegedRoleSchema,
+                                     SubStatusEnum)
 
 
 class SqlCrudBilling(BaseCrudBilling):

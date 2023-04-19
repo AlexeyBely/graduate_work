@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field, UUID4
-from fastapi import Query
 from datetime import datetime
+
+from fastapi import Query
+from pydantic import UUID4, BaseModel, Field
 
 
 class QueryOfferRole(BaseModel):

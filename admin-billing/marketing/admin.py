@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Tariff, PersonalDiscount, MonthsDiscount, Promocode
 from .admin_hooks import HookTariffAdmin
+from .models import MonthsDiscount, PersonalDiscount, Promocode, Tariff
 
 
 @admin.register(Tariff)

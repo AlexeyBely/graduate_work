@@ -1,9 +1,8 @@
-import uuid
 import datetime
+import uuid
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 
 MAX_LENGTH_NAME = 255
 

@@ -1,12 +1,12 @@
 import uuid
-from enum import IntEnum
 from datetime import datetime
+from enum import IntEnum
+
 from grpc.aio import insecure_channel
 
-from grpc_service.notify_service import message_sender_pb2_grpc
-from grpc_service.notify_service import message_sender_pb2
 from core.config import settings
-
+from grpc_service.notify_service import (message_sender_pb2,
+                                         message_sender_pb2_grpc)
 
 grpc_url = f'{settings.notify_grpc_host}:{settings.notify_grpc_port}'
 

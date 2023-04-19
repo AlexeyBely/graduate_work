@@ -1,18 +1,18 @@
 import uuid
-from functools import lru_cache
 from datetime import datetime
+from functools import lru_cache
 
-from core.config import settings
-from crud_service.read_marketing_abc import BaseReadMarketing
-from crud_service.crud_billing_abc import BaseCrudBilling
-from payment_service.payment_service_abs import BasePaymentService
-from crud_service.crud_dependency import get_crud_billing, get_crud_marketing
-from payment_service.payment_dependency import get_payment_service
-from schemas.offer_schemas import RoleOffer
-from schemas.billing_schemas import (CustomerSchema, CustomerBase, PaymentBase, 
-                                     PayStatus, PaymentSchema)
 from billing.privileged_role import subscribe_roles
+from core.config import settings
+from crud_service.crud_billing_abc import BaseCrudBilling
+from crud_service.crud_dependency import get_crud_billing, get_crud_marketing
+from crud_service.read_marketing_abc import BaseReadMarketing
 from grpc_service.auth_service import roles_control_client as rc_client
+from payment_service.payment_dependency import get_payment_service
+from payment_service.payment_service_abs import BasePaymentService
+from schemas.billing_schemas import (CustomerBase, CustomerSchema, PaymentBase,
+                                     PaymentSchema, PayStatus)
+from schemas.offer_schemas import RoleOffer
 
 
 class BillingOffer:

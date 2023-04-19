@@ -2,7 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from grpc_service.notify_service import message_sender_pb2 as message__sender__pb2
+from grpc_service.notify_service import \
+    message_sender_pb2 as message__sender__pb2
 
 
 class MessageSenderStub(object):

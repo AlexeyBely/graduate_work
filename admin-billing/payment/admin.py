@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Customer, PrivilegedRole, Payment
+from .models import Customer, Payment, PrivilegedRole
 
 
 class PrivilegedRoleInline(admin.TabularInline):

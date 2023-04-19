@@ -1,13 +1,15 @@
 import uuid
+
+from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import desc
 
-from schemas.marketing_schemas import (TariffSchema, PersonalDiscountSchema, 
-                                       MonthsDiscountSchema, PromocodeSchema)
 from crud_service.read_marketing_abc import BaseReadMarketing
-from models.marketing import (TariffModel, PersonalDiscountModel,
-                              MonthsDiscountModel, PromocodeModel)
+from models.marketing import (MonthsDiscountModel, PersonalDiscountModel,
+                              PromocodeModel, TariffModel)
+from schemas.marketing_schemas import (MonthsDiscountSchema,
+                                       PersonalDiscountSchema, PromocodeSchema,
+                                       TariffSchema)
 
 
 class SqlReadMarketing(BaseReadMarketing):
