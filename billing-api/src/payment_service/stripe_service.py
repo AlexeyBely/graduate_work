@@ -1,3 +1,6 @@
+import logging
+
+import backoff
 from async_stripe import stripe
 
 from core.config import settings
@@ -6,6 +9,7 @@ from schemas.billing_schemas import PayStatus
 from schemas.payment import CheckoutPayment, RefundPayment
 
 stripe.api_key = settings.stripe_api_key
+logging.getLogger('backoff').addHandler(logging.StreamHandler())
 
 
 class StripeService(BasePaymentService):
@@ -43,6 +47,9 @@ class StripeService(BasePaymentService):
             status=PayStatus.BILLED
         )
     
+    @backoff.on_exception(backoff.expo, 
+                          BaseException, 
+                          max_time=settings.max_time_backoff)
     async def get_checkouts(self, checkout_idx: list[str]
                             ) -> list[CheckoutPayment] | None:
         """Return checkouts list."""
@@ -72,6 +79,9 @@ class StripeService(BasePaymentService):
             status=PayStatus.REFUND
         )
     
+    @backoff.on_exception(backoff.expo, 
+                          BaseException, 
+                          max_time=settings.max_time_backoff)
     async def get_refunds(self, refunds_idx: list[str]) -> list[RefundPayment] | None:
         """Return refund list."""
         payment_refunds = []

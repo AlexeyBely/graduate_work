@@ -14,8 +14,6 @@ services:
       POSTGRES_DB: "${BILLING_POSTGRES_DB}"
       POSTGRES_USER: "${BILLING_POSTGRES_USER}"
       POSTGRES_PASSWORD: "${BILLING_POSTGRES_PASSWORD}"
-    ports:
-      - "5432:5432"
 
   admin-billing:
     build:

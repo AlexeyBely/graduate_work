@@ -107,7 +107,7 @@ async def get_url_payment(
 async def get_possible_refunds(
     billing: BillingOffer = Depends(get_billing_offer),
     token_data: TokenData = Depends(authenticate)
-) -> list[ResponseStatusRole]:
+) -> list[PaymentSchema]:
     user_id = uuid.UUID(token_data.user)
     payments = await billing.get_payments_for_refund(user_id)
     if payments is None:

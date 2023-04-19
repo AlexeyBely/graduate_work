@@ -25,4 +25,5 @@ class EnvSettings(BaseSettings):
         values['csrf_trusted_parse'] = [v for v in val.split(', ')]
         return values
 
+
 env_settings = EnvSettings()
