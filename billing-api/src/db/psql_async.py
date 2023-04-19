@@ -1,9 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.pool import NullPool
 
 from core.config import settings
-
 
 sqlalchemy_asyncpg_url = 'postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}'.format(
     settings.psql_user,

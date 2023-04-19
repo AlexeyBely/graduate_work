@@ -1,10 +1,9 @@
 import uuid
+
 import grpc
-
-from . import roles_control_pb2
-from . import roles_control_pb2_grpc
-
 from config.components.env_setting import env_settings as _es
+
+from . import roles_control_pb2, roles_control_pb2_grpc
 
 
 def get_stub_grpc():

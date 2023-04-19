@@ -1,10 +1,9 @@
 import uuid
+
 from grpc.aio import insecure_channel
 
-from grpc_service.auth_service import roles_control_pb2_grpc
-from grpc_service.auth_service import roles_control_pb2
 from core.config import settings
-
+from grpc_service.auth_service import roles_control_pb2, roles_control_pb2_grpc
 
 grpc_url = f'{settings.auth_grpc_host}:{settings.auth_grpc_port}'
 

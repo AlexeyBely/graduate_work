@@ -1,6 +1,7 @@
-from pydantic import BaseModel, UUID4, EmailStr
 from datetime import datetime
 from enum import Enum
+
+from pydantic import UUID4, BaseModel, EmailStr
 
 
 class SubStatusEnum(str, Enum):

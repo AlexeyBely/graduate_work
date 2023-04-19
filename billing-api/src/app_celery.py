@@ -1,13 +1,13 @@
 import logging
+
 from asgiref.sync import async_to_sync
 from celery import Celery
 
-from core.config import settings
 from billing.billing_offer import get_billing_offer
 from billing.privileged_role import subscribe_roles
+from core.config import settings
 from crud_service.crud_dependency import get_crud_billing, get_crud_marketing
 from db import psql_async
-
 
 logger = logging.getLogger('')
 

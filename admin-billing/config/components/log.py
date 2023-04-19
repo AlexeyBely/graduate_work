@@ -1,7 +1,6 @@
 import logging
 from logging import config as logging_config
 
-
 logger = logging.getLogger('django.db.backends')
 log_hook = logging.getLogger('django_hook')
 

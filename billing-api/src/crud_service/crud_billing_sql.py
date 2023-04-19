@@ -1,20 +1,21 @@
 import uuid
 from datetime import datetime, timedelta
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.future import select
 
-from schemas.billing_schemas import (CustomerSchema, PrivilegedRoleSchema,
-                                     PaymentSchema, PayStatus, SubStatusEnum,
-                                     CustomerBase, PrivilegedRoleBase, PaymentBase)
 from crud_service.crud_billing_abc import BaseCrudBilling
-from models.billing import CustomerModel, PrivilegedRoleModel, PaymentModel
+from models.billing import CustomerModel, PaymentModel, PrivilegedRoleModel
+from schemas.billing_schemas import (CustomerBase, CustomerSchema, PaymentBase,
+                                     PaymentSchema, PayStatus,
+                                     PrivilegedRoleBase, PrivilegedRoleSchema,
+                                     SubStatusEnum)
 
 
 class SqlCrudBilling(BaseCrudBilling):
     """CRUD from schema billing database."""
 
-    def __init__(self, async_session: AsyncSession):
+    def __init__(self, async_session: async_sessionmaker):
         self.async_session = async_session
     
     # Methods for customer
@@ -158,7 +159,7 @@ class SqlCrudBilling(BaseCrudBilling):
             return [PrivilegedRoleSchema(**role.__dict__) for role in privil_roles]
 
     # Utils methods    
-    async def _execute_customer(self, session: AsyncSession, user_id: uuid.UUID
+    async def _execute_customer(self, session: async_sessionmaker, user_id: uuid.UUID
                                 ) -> CustomerModel | None:
         stmt = select(CustomerModel).where(CustomerModel.user_id == user_id)
         result = await session.execute(stmt)

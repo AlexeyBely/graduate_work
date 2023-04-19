@@ -1,5 +1,8 @@
 import uuid
-from sqlalchemy import Column, String, UUID, DateTime, Integer, Float, ForeignKey 
+
+from sqlalchemy import (UUID, Column, DateTime, Float, ForeignKey, Integer,
+                        String)
+
 from db.psql_async import Base
 
 

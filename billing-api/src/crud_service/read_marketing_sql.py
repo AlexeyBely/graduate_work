@@ -1,19 +1,21 @@
 import uuid
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from sqlalchemy import desc
 
-from schemas.marketing_schemas import (TariffSchema, PersonalDiscountSchema, 
-                                       MonthsDiscountSchema, PromocodeSchema)
+from sqlalchemy import desc
+from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy.future import select
+
 from crud_service.read_marketing_abc import BaseReadMarketing
-from models.marketing import (TariffModel, PersonalDiscountModel,
-                              MonthsDiscountModel, PromocodeModel)
+from models.marketing import (MonthsDiscountModel, PersonalDiscountModel,
+                              PromocodeModel, TariffModel)
+from schemas.marketing_schemas import (MonthsDiscountSchema,
+                                       PersonalDiscountSchema, PromocodeSchema,
+                                       TariffSchema)
 
 
 class SqlReadMarketing(BaseReadMarketing):
     """Reading from schema marketing sql database."""
     
-    def __init__(self, async_session: AsyncSession):
+    def __init__(self, async_session: async_sessionmaker):
         self.async_session = async_session
 
     async def get_tariffs(self) -> list[TariffSchema] | None:

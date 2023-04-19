@@ -2,9 +2,10 @@ import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from schemas.billing_schemas import (CustomerSchema, PrivilegedRoleSchema,
-                                     PaymentSchema, PayStatus, SubStatusEnum,
-                                     CustomerBase, PrivilegedRoleBase, PaymentBase)
+from schemas.billing_schemas import (CustomerBase, CustomerSchema, PaymentBase,
+                                     PaymentSchema, PayStatus,
+                                     PrivilegedRoleBase, PrivilegedRoleSchema,
+                                     SubStatusEnum)
 
 
 class BaseCrudBilling(ABC):

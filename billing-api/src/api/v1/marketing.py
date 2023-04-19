@@ -1,14 +1,14 @@
 import uuid
 from http import HTTPStatus
+
 from fastapi import APIRouter, Depends, HTTPException
 
 import api.messages as messages
 from api.v1.auth import TokenData, authenticate
-from schemas.marketing_schemas import (TariffSchema, PersonalDiscountSchema, 
-                                       MonthsDiscountSchema)
-from crud_service.read_marketing_abc import BaseReadMarketing
 from crud_service.crud_dependency import get_crud_marketing
-
+from crud_service.read_marketing_abc import BaseReadMarketing
+from schemas.marketing_schemas import (MonthsDiscountSchema,
+                                       PersonalDiscountSchema, TariffSchema)
 
 router = APIRouter()
 

@@ -1,17 +1,18 @@
 import uuid
 from http import HTTPStatus
-from fastapi import APIRouter, Depends, HTTPException, Body
+
+from fastapi import APIRouter, Body, Depends, HTTPException
 
 import api.messages as messages
-from schemas.offer_schemas import (QueryOfferRole, ResponseStatusRole, RequestRefund,
-                                   RequestPaymentOffer, ResponsePaymentOffer, RoleOffer)
-from schemas.billing_schemas import SubStatusEnum, PaymentSchema
-from crud_service.crud_billing_abc import BaseCrudBilling
-from crud_service.crud_dependency import get_crud_billing
-from billing.billing_offer import get_billing_offer, BillingOffer
 from api.v1.auth import TokenData, authenticate
 from app_celery import load_payment_system
-
+from billing.billing_offer import BillingOffer, get_billing_offer
+from crud_service.crud_billing_abc import BaseCrudBilling
+from crud_service.crud_dependency import get_crud_billing
+from schemas.billing_schemas import PaymentSchema, SubStatusEnum
+from schemas.offer_schemas import (QueryOfferRole, RequestPaymentOffer,
+                                   RequestRefund, ResponsePaymentOffer,
+                                   ResponseStatusRole, RoleOffer)
 
 router = APIRouter()
 
@@ -106,7 +107,7 @@ async def get_url_payment(
 async def get_possible_refunds(
     billing: BillingOffer = Depends(get_billing_offer),
     token_data: TokenData = Depends(authenticate)
-) -> list[ResponseStatusRole]:
+) -> list[PaymentSchema]:
     user_id = uuid.UUID(token_data.user)
     payments = await billing.get_payments_for_refund(user_id)
     if payments is None:

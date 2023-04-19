@@ -1,8 +1,8 @@
 from logging import config as logging_config
 
-from core.logger import LOGGING
 from pydantic import BaseSettings, Field
 
+from core.logger import LOGGING
 
 logging_config.dictConfig(LOGGING)
 
@@ -33,7 +33,8 @@ class ApiSettings(BaseSettings):
     billing_rabbitmq_host: str = '127.0.0.1'
     billing_rabbitmq_port: int = 5672
     check_payment_system_period: int = 15
-    check_subscribe_period: int = 43200  
+    check_subscribe_period: int = 43200
+    max_time_backoff: int = 60
 
 
 settings = ApiSettings()

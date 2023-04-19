@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Customer, PrivilegedRole, Payment
+from .models import Customer, Payment, PrivilegedRole
 
 
 class PrivilegedRoleInline(admin.TabularInline):
@@ -34,5 +34,10 @@ class CustomerAdmin(admin.ModelAdmin):
                 for role in roles]
     
     get_privileged_roles.short_description = _('Role')
+
+
+admin.site.site_header = 'Администрирование оплаты' 
+admin.site.index_title = 'Администрирование оплаты'               
+admin.site.site_title = 'Администрирование оплаты' 
 
      
